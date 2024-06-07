@@ -23,7 +23,7 @@
           <dd>
             @if (character()!.item) {
               <div>
-                <a [routerLink]="['/item', character()!.item?.id, 'view']">{{ character()!.item?.id }}</a>
+                <a [routerLink]="['/item', character()!.item?.id, 'view']">{{ character()!.item?.title }}</a>
               </div>
             }
           </dd>

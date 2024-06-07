@@ -49,7 +49,7 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
-            <th scope="col" jhiSortBy="item.id">
+            <th scope="col" jhiSortBy="item.title">
               <div class="d-flex">
                 <span>Item</span>
                 <fa-icon class="p-1" icon="sort"></fa-icon>
@@ -68,7 +68,7 @@
               <td>
                 @if (character.item) {
                   <div>
-                    <a [routerLink]="['/item', character.item.id, 'view']">{{ character.item.id }}</a>
+                    <a [routerLink]="['/item', character.item.id, 'view']">{{ character.item.title }}</a>
                   </div>
                 }
               </td>
