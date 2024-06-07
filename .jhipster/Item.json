@@ -1,0 +1,22 @@
+{
+  "annotations": {
+    "changelogDate": "20240607132926"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "UUID",
+      "options": {
+        "id": true
+      }
+    },
+    {
+      "fieldName": "title",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Item",
+  "relationships": [],
+  "searchEngine": "no"
+}
