@@ -19,6 +19,7 @@
   "name": "Character",
   "relationships": [
     {
+      "otherEntityField": "title",
       "otherEntityName": "item",
       "relationshipName": "item",
       "relationshipSide": "left",

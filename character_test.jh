@@ -10,5 +10,5 @@ entity Item {
 }
 
 relationship ManyToOne {
-	Character{item} to Item
+	Character{item(title)} to Item
 }

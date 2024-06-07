@@ -139,12 +139,17 @@ public class CharacterResource {
     /**
      * {@code GET  /characters} : get all the characters.
      *
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of characters in body.
      */
     @GetMapping("")
-    public List<Character> getAllCharacters() {
+    public List<Character> getAllCharacters(@RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload) {
         log.debug("REST request to get all Characters");
-        return characterRepository.findAll();
+        if (eagerload) {
+            return characterRepository.findAllWithEagerRelationships();
+        } else {
+            return characterRepository.findAll();
+        }
     }
 
     /**
@@ -156,7 +161,7 @@ public class CharacterResource {
     @GetMapping("/{id}")
     public ResponseEntity<Character> getCharacter(@PathVariable("id") UUID id) {
         log.debug("REST request to get Character : {}", id);
-        Optional<Character> character = characterRepository.findById(id);
+        Optional<Character> character = characterRepository.findOneWithEagerRelationships(id);
         return ResponseUtil.wrapOrNotFound(character);
     }
 

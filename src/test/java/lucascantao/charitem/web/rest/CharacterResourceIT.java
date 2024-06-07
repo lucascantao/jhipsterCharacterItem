@@ -4,11 +4,13 @@ import static lucascantao.charitem.domain.CharacterAsserts.*;
 import static lucascantao.charitem.web.rest.TestUtil.createUpdateProxyForBean;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.UUID;
 import lucascantao.charitem.IntegrationTest;
 import lucascantao.charitem.domain.Character;
@@ -16,8 +18,13 @@ import lucascantao.charitem.repository.CharacterRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link CharacterResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class CharacterResourceIT {
@@ -42,6 +50,9 @@ class CharacterResourceIT {
 
     @Autowired
     private CharacterRepository characterRepository;
+
+    @Mock
+    private CharacterRepository characterRepositoryMock;
 
     @Autowired
     private EntityManager em;
@@ -140,6 +151,23 @@ class CharacterResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(character.getId().toString())))
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)));
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllCharactersWithEagerRelationshipsIsEnabled() throws Exception {
+        when(characterRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restCharacterMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(characterRepositoryMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllCharactersWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(characterRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restCharacterMockMvc.perform(get(ENTITY_API_URL + "?eagerload=false")).andExpect(status().isOk());
+        verify(characterRepositoryMock, times(1)).findAll(any(Pageable.class));
     }
 
     @Test
