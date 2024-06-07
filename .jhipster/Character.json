@@ -1,0 +1,29 @@
+{
+  "annotations": {
+    "changelogDate": "20240607132925"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "UUID",
+      "options": {
+        "id": true
+      }
+    },
+    {
+      "fieldName": "title",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Character",
+  "relationships": [
+    {
+      "otherEntityName": "item",
+      "relationshipName": "item",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no"
+}

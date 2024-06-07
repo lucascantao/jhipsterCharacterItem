@@ -1,0 +1,14 @@
+
+entity Character {
+	@id id UUID
+    title String
+}
+
+entity Item {
+	@id id UUID
+    title String
+}
+
+relationship ManyToOne {
+	Character{item} to Item
+}
